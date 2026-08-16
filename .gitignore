@@ -1,0 +1,9 @@
+.DS_Store
+build/
+*.xcarchive
+*.ipa
+shots/
+LazyChart.xcodeproj/
+__pycache__/
+*.pyc
+.omc/
