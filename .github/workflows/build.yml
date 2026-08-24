@@ -72,8 +72,18 @@ jobs:
     - name: Install Python deps
       run: pip3 install --break-system-packages PyJWT requests Pillow
 
-    - name: Generate Screenshots
-      run: python3 scripts/gen_screenshots.py
+    - name: Build app for Simulator
+      run: |
+        xcodebuild build \
+          -scheme LazyChart \
+          -configuration Release \
+          -sdk iphonesimulator \
+          -destination "generic/platform=iOS Simulator" \
+          -derivedDataPath build/sim \
+          CODE_SIGNING_ALLOWED=NO | tail -5
+
+    - name: Capture real screenshots
+      run: python3 scripts/capture_screenshots.py "build/sim/Build/Products/Release-iphonesimulator/LazyChart.app"
 
     - name: Set Metadata
       run: python3 scripts/set_metadata.py

@@ -105,6 +105,32 @@ struct ChartDoc: Identifiable, Codable, Hashable {
         let s = Series(name: L.seriesDefault, values: [10, 20, 15])
         return ChartDoc(title: L.untitled, kind: .bar, labels: labels, series: [s])
     }
+
+    /// Populated demo charts used only when capturing App Store screenshots.
+    static func demoSet() -> [ChartDoc] {
+        let bar = ChartDoc(
+            title: L.t("店舗別の売上", "Sales by Store"),
+            kind: .bar,
+            labels: L.isJa ? ["4月", "5月", "6月", "7月", "8月"] : ["Apr", "May", "Jun", "Jul", "Aug"],
+            series: [
+                Series(name: L.t("新宿店", "Shinjuku"), values: [42, 58, 50, 74, 66]),
+                Series(name: L.t("渋谷店", "Shibuya"), values: [30, 44, 62, 55, 71]),
+            ],
+            paletteIndex: 0)
+        let pie = ChartDoc(
+            title: L.t("売上の内訳", "Revenue Share"),
+            kind: .pie,
+            labels: L.isJa ? ["食品", "雑貨", "衣料", "家電"] : ["Food", "Goods", "Apparel", "Home"],
+            series: [Series(name: L.t("割合", "Share"), values: [42, 26, 20, 12])],
+            paletteIndex: 2)
+        let line = ChartDoc(
+            title: L.t("会員数の推移", "Member Growth"),
+            kind: .line,
+            labels: L.isJa ? ["1月", "2月", "3月", "4月", "5月", "6月"] : ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            series: [Series(name: L.t("会員数", "Members"), values: [120, 180, 240, 300, 360, 430])],
+            paletteIndex: 1)
+        return [bar, pie, line]
+    }
 }
 
 /// Color palettes. Each is an ordered set of pleasant colors.

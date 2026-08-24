@@ -33,6 +33,12 @@ struct ContentView: View {
                 EditorView(doc: doc)
                     .environmentObject(store)
             }
+            .onAppear {
+                if let kind = ScreenshotMode.autoEditKind,
+                   let doc = store.charts.first(where: { $0.kind == kind }) {
+                    editing = doc
+                }
+            }
             .alert(L.rename, isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
                 TextField(L.titlePlaceholder, text: $renameText)
                 Button(L.cancel, role: .cancel) { renaming = nil }

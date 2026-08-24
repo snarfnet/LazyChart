@@ -10,7 +10,13 @@ final class Store: ObservableObject {
         return dir.appendingPathComponent("charts.json")
     }()
 
-    init() { load() }
+    init() {
+        if ScreenshotMode.isActive {
+            charts = ChartDoc.demoSet()
+            return
+        }
+        load()
+    }
 
     func load() {
         guard let data = try? Data(contentsOf: fileURL),
