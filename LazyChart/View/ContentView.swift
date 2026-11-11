@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var store: Store
+    @State private var choosingTemplate = false
+    @State private var pendingTemplate: ChartDoc?
     @State private var editing: ChartDoc?
     @State private var renaming: ChartDoc?
     @State private var renameText = ""
@@ -20,15 +22,16 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        let doc = ChartDoc.empty()
-                        store.upsert(doc)
-                        editing = doc
+                        choosingTemplate = true
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 22))
                     }
                 }
             }
+            .sheet(isPresented: $choosingTemplate, onDismiss: {
+                if let doc = pendingTemplate { store.upsert(doc); editing = doc; pendingTemplate = nil }
+            }) { TemplatePicker { pendingTemplate = $0 } }
             .fullScreenCover(item: $editing) { doc in
                 EditorView(doc: doc)
                     .environmentObject(store)
@@ -90,9 +93,7 @@ struct ContentView: View {
                 .font(.system(size: 15, design: .rounded))
                 .foregroundStyle(Theme.subtle)
             Button {
-                let doc = ChartDoc.empty()
-                store.upsert(doc)
-                editing = doc
+                choosingTemplate = true
             } label: {
                 Label(L.newChart, systemImage: "plus")
                     .font(.system(size: 16, weight: .semibold, design: .rounded))
