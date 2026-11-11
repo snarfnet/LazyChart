@@ -37,6 +37,9 @@ struct ContentView: View {
                     .environmentObject(store)
             }
             .onAppear {
+                #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("--store-screenshot") { choosingTemplate = true }
+                #endif
                 if let kind = ScreenshotMode.autoEditKind,
                    let doc = store.charts.first(where: { $0.kind == kind }) {
                     editing = doc
